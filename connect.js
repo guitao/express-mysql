@@ -3,16 +3,8 @@ const mysql = require('mysql');
 const cors = require('cors');
 const app = express();
 const router = express.Router();
+const mysqlConfig = require('./db/dbConfig')
 
-const options = {
-    host: '42.192.51.46',
-    user: 'root',
-    password: 'Gt1213800%',
-    port: '3306',
-    database: 'test',
-    connectTimeout: 5000,
-    multipleStatements: false
-}
 // 跨域处理
 app.use(cors());
 // json请求
@@ -28,7 +20,7 @@ rePool();
 function rePool() {
     // 断线重连机制
     pool = mysql.createPool({
-        ...options,
+        ...mysqlConfig,
         waitForConnections: true,
         connectTimeout: 100,
         queueLimit: 10
