@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "boom": "^7.3.0",

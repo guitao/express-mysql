@@ -1,34 +1,42 @@
-const {
-    pool
-} = require('../connect');
+const mysql = require('mysql');
+const config = require('../db/dbConfig');
+
+//连接mysql
+function connect() {
+    const { host, user, password, database } = config;
+    return mysql.createConnection({
+        host,
+        user,
+        password,
+        database
+    })
+}
 
 //新建查询连接
-function querySql(sql, where_value = '') {
-
+function querySql(sql) {
+    const conn = connect();
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, coon) => {
-            try {
-                coon.query(sql, where_value, (err, res) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(res);
-                    }
-                })
-            } catch (e) {
-                reject(e);
-            } finally {
-                //释放连接
-                coon.release();
-            }
-        })
+        try {
+            conn.query(sql, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            })
+        } catch (e) {
+            reject(e);
+        } finally {
+            //释放连接
+            conn.end();
+        }
     })
 }
 
 //查询一条语句
-function queryOne(sql, where_value = '') {
+function queryOne(sql) {
     return new Promise((resolve, reject) => {
-        querySql(sql, where_value).then(res => {
+        querySql(sql).then(res => {
             console.log('res===', res)
             if (res && res.length > 0) {
                 resolve(res[0]);
