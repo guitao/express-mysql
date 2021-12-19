@@ -84,7 +84,6 @@ router.post('/register', (req, res, next) => {
         let { username, password } = req.body;
 
         findUser(username).then(data => {
-            console.log("===data====", data)
             if (data) {
                 res.json(new Result({
                     code: CODE_ERROR,
